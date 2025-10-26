@@ -1,0 +1,39 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": ["hi", "hello", "hey", "good morning", "good evening"],
+      "responses": ["Hello! How can I help you today?", "Hi there! What can I do for you?"]
+    },
+    {
+      "tag": "order_status",
+      "patterns": ["where is my order", "track my order", "order status", "track order", "tracking"],
+      "responses": ["Please provide your order ID and I will check the status for you."]
+    },
+    {
+      "tag": "cancel_order",
+      "patterns": ["cancel my order", "i want to cancel order", "how to cancel order"],
+      "responses": ["You can cancel your order before it ships. Share the order ID and I'll check eligibility."]
+    },
+    {
+      "tag": "return_policy",
+      "patterns": ["how to return a product", "return policy", "i want to return", "how do i return"],
+      "responses": ["Our return policy: return within 7 days of delivery. Items must be unused and in original packaging."]
+    },
+    {
+      "tag": "shipping_info",
+      "patterns": ["free shipping", "shipping cost", "do you offer free shipping", "delivery charges"],
+      "responses": ["We offer free shipping for orders above ₹500. Standard shipping costs vary by location."]
+    },
+    {
+      "tag": "human_agent",
+      "patterns": ["talk to a human", "human", "agent", "customer support", "representative"],
+      "responses": ["Connecting you to a human agent. Please wait..."]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": ["bye", "goodbye", "see you", "thanks", "thank you"],
+      "responses": ["Goodbye! Have a nice day.", "Thanks for contacting us!"]
+    }
+  ]
+}
