@@ -1,52 +1,92 @@
 import streamlit as st
 import random
+import re
 
 # -------------------------------
 # TITLE AND DESCRIPTION
 # -------------------------------
 st.set_page_config(page_title="Customer Service Chatbot", page_icon="💬", layout="centered")
 st.title("💬 Customer Service Chatbot")
-st.write("Ask me anything about our products, services, or policies!")
+st.write("Ask me anything about your order, refund, payment, or shipping!")
 
 # -------------------------------
-# SIMPLE RULE-BASED RESPONSES
+# INTENT DEFINITIONS
 # -------------------------------
-responses = {
-    "hi": ["Hello! 👋 How can I help you today?", "Hey there! What can I do for you?"],
-    "hello": ["Hi there! 😊 How may I assist you?", "Hello! How can I help you today?"],
-    "bye": ["Goodbye! Have a nice day! 👋", "See you soon! 😊"],
-    "thanks": ["You're welcome! 😊", "Happy to help! 👍"],
-    "product": [
-        "We offer a variety of products. Could you specify which category you’re interested in?",
-        "Our products include electronics, fashion, and home essentials. What are you looking for?"
-    ],
-    "refund": [
-        "To request a refund, please visit the 'Orders' section in your account and click 'Request Refund'.",
-        "Refunds are processed within 5-7 business days after approval."
-    ],
-    "shipping": [
-        "Shipping usually takes 3-5 business days. 🚚",
-        "We provide free shipping for orders above ₹999!"
-    ],
-    "payment": [
-        "We accept payments via credit/debit cards, UPI, and net banking.",
-        "Your payment details are always encrypted and secure 🔒."
-    ],
-    "default": [
-        "I'm not sure I understand that. Could you please rephrase?",
-        "Hmm 🤔 I don’t have information on that. Can you ask about products, refunds, or shipping?"
-    ]
+intents = {
+    "greeting": {
+        "keywords": ["hi", "hello", "hey"],
+        "responses": [
+            "Hello! 👋 How can I help you today?",
+            "Hey there! 😊 What can I do for you?"
+        ]
+    },
+    "goodbye": {
+        "keywords": ["bye", "goodbye", "see you"],
+        "responses": [
+            "Goodbye! Have a great day! 👋",
+            "See you soon! 😊"
+        ]
+    },
+    "thanks": {
+        "keywords": ["thanks", "thank you"],
+        "responses": [
+            "You're welcome! 😊",
+            "Happy to help! 👍"
+        ]
+    },
+    "order_status": {
+        "keywords": ["order", "where is my order", "track order", "order id"],
+        "responses": [
+            "Please check your 'My Orders' page for live order tracking. 🚚",
+            "Your order is being processed. You can track it from the Orders section. 📦",
+            "To track an order, go to 'My Orders' → Select your order → Click 'Track'."
+        ]
+    },
+    "refund": {
+        "keywords": ["refund", "return", "money back"],
+        "responses": [
+            "To request a refund, visit the 'Orders' page and select 'Request Refund'. 💸",
+            "Refunds are processed within 5–7 business days after approval."
+        ]
+    },
+    "shipping": {
+        "keywords": ["shipping", "delivery", "courier", "ship"],
+        "responses": [
+            "Standard delivery takes 3–5 business days. 🚚",
+            "We offer free shipping for orders above ₹999!"
+        ]
+    },
+    "payment": {
+        "keywords": ["payment", "card", "upi", "credit", "debit"],
+        "responses": [
+            "We accept cards, UPI, and net banking. All transactions are secure. 🔒",
+            "If your payment failed, please retry after a few minutes."
+        ]
+    },
+    "default": {
+        "responses": [
+            "I'm not sure I understand that. Could you please rephrase?",
+            "Hmm 🤔 I don’t have information on that. Can you ask about orders, refunds, or shipping?"
+        ]
+    }
 }
+
+# -------------------------------
+# FUNCTION TO DETECT INTENT
+# -------------------------------
+def get_intent(user_input):
+    user_input = user_input.lower()
+    for intent, data in intents.items():
+        for kw in data["keywords"]:
+            if re.search(rf"\b{kw}\b", user_input):
+                return intent
+    return "default"
 
 # -------------------------------
 # FUNCTION TO GENERATE RESPONSE
 # -------------------------------
-def get_response(user_input):
-    user_input = user_input.lower()
-    for key in responses.keys():
-        if key in user_input:
-            return random.choice(responses[key])
-    return random.choice(responses["default"])
+def get_response(intent):
+    return random.choice(intents[intent]["responses"])
 
 # -------------------------------
 # CHAT UI
@@ -58,7 +98,8 @@ if "chat_history" not in st.session_state:
 user_input = st.chat_input("Type your message here...")
 
 if user_input:
-    response = get_response(user_input)
+    intent = get_intent(user_input)
+    response = get_response(intent)
     st.session_state["chat_history"].append(("user", user_input))
     st.session_state["chat_history"].append(("bot", response))
 
