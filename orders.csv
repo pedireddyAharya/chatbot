@@ -1,0 +1,5 @@
+order_id,customer_name,status,eta
+OD1001,Arjun Shankar,Processing,2025-10-20
+OD1002,Meena Rao,Shipped,2025-10-18
+OD1003,Rahul Gupta,Delivered,2025-10-10
+OD1004,Anita Kumar,Cancelled,2025-10-01
